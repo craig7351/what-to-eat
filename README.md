@@ -8,6 +8,8 @@
 
 [![線上試玩](https://img.shields.io/badge/🎡_線上試玩-craig7351.github.io-ff7f9c)](https://craig7351.github.io/what-to-eat/) ![分類](https://img.shields.io/badge/分類-早餐%20%7C%20午晚餐%20%7C%20飲料-ffcf4d) ![tech](https://img.shields.io/badge/tech-HTML%20%2B%20CSS%20%2B%20JS-77c) ![deps](https://img.shields.io/badge/dependencies-0-4caf50)
 
+![畫面預覽](docs/preview.webp)
+
 ---
 
 ## ✨ 功能
