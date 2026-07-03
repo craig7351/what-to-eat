@@ -90,7 +90,9 @@ body {
 /* ===== Tabs ===== */
 .tabs {
   display: inline-flex;
-  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
   background: rgba(255,248,236,.75);
   padding: 8px;
   border-radius: 999px;
@@ -103,7 +105,7 @@ body {
   font-size: clamp(15px, 2.2vw, 18px);
   font-weight: 700;
   color: #a07b52;
-  padding: 12px 28px;
+  padding: 11px 24px;
   border-radius: 999px;
   background: transparent;
   display: inline-flex;
@@ -442,25 +444,55 @@ body {
   100% { transform: scale(1); }
 }
 
-/* ===== 音效開關 ===== */
-.sound-toggle {
+/* ===== 右上角控制列 ===== */
+.top-controls {
   position: fixed;
   top: 18px;
   right: 18px;
   z-index: 60;
-  width: 52px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* FB 粉絲團按鈕 */
+.fb-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   height: 52px;
-  border: none;
-  cursor: pointer;
-  border-radius: 50%;
-  font-size: 22px;
-  background: rgba(255,248,236,.9);
-  box-shadow: 0 5px 14px rgba(224,154,31,.3), inset 0 0 0 2px #fff;
+  padding: 0 18px 0 14px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 16px;
+  color: #fff;
+  background: linear-gradient(180deg, #2a8bff, #1877f2);
+  box-shadow: 0 5px 14px rgba(24,119,242,.4), inset 0 0 0 2px rgba(255,255,255,.35);
   transition: transform .15s ease, box-shadow .15s ease;
 }
-.sound-toggle:hover { transform: translateY(-2px) scale(1.05); }
-.sound-toggle:active { transform: scale(.95); }
-.sound-toggle.is-muted { filter: grayscale(.6); opacity: .8; }
+.fb-btn:hover { transform: translateY(-2px) scale(1.04); }
+.fb-btn:active { transform: scale(.96); }
+.fb-f {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #fff;
+  color: #1877f2;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 900;
+  font-size: 20px;
+  line-height: 1;
+}
+
+/* 手機：FB 只留圖示，省空間 */
+@media (max-width: 560px) {
+  .fb-btn { padding: 0; width: 52px; height: 52px; justify-content: center; }
+  .fb-label { display: none; }
+}
 
 /* ===== 全螢幕彩帶紙屑 ===== */
 .confetti-layer {

@@ -30,12 +30,24 @@ const meals = {
     { name: "燒臘飯",   icon: "assets/午晚餐/燒臘飯.png" },
     { name: "親子丼",   icon: "assets/午晚餐/親子丼.png" },
     { name: "雞腿飯",   icon: "assets/午晚餐/雞腿飯.png" }
+  ],
+  drinks: [
+    { name: "珍珠奶茶", icon: "assets/飲料/珍珠奶茶.png" },
+    { name: "紅茶",     icon: "assets/飲料/紅茶.png" },
+    { name: "綠茶",     icon: "assets/飲料/綠茶.png" },
+    { name: "美式",     icon: "assets/飲料/美式.png" },
+    { name: "拿鐵",     icon: "assets/飲料/拿鐵.png" },
+    { name: "豆漿",     icon: "assets/飲料/豆漿.png" },
+    { name: "翡翠檸檬", icon: "assets/飲料/翡翠檸檬.png" },
+    { name: "檸檬紅",   icon: "assets/飲料/檸檬紅.png" },
+    { name: "水果茶",   icon: "assets/飲料/水果茶.png" }
   ]
 };
 
 const LABELS = {
   breakfast:   "今天早餐吃",
-  lunchDinner: "今天午晚餐吃"
+  lunchDinner: "今天午晚餐吃",
+  drinks:      "今天飲料喝"
 };
 
 // 柔和粉彩色循環（奶油黃、米白、淺橘、柔粉、薄荷綠、淡藍）
@@ -67,7 +79,6 @@ const resultDivider = document.getElementById("resultDivider");
 const hub          = document.getElementById("hub");
 const hubFx        = document.getElementById("hubFx");
 const confettiLayer = document.getElementById("confettiLayer");
-const soundToggle  = document.getElementById("soundToggle");
 
 // ===== 幾何工具 =====
 // 角度以「12 點鐘方向為 0、順時針增加」計算
@@ -506,13 +517,6 @@ tabs.forEach((t) => {
     Sound.click();
     switchCategory(t.dataset.category);
   });
-});
-
-soundToggle.addEventListener("click", () => {
-  const muted = Sound.toggleMute();
-  soundToggle.classList.toggle("is-muted", muted);
-  soundToggle.querySelector(".sound-ico").textContent = muted ? "🔇" : "🔊";
-  if (!muted) Sound.startBGM();
 });
 
 // ===== 初始化 =====
