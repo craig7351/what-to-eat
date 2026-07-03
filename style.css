@@ -19,7 +19,7 @@ html, body { height: 100%; }
 body {
   font-family: "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", system-ui, sans-serif;
   color: var(--brown-text);
-  background: url("assets/主頁/背景.png") center / cover no-repeat fixed, #ffe9c9;
+  background: url("assets/主頁/背景.webp") center / cover no-repeat fixed, #ffe9c9;
   min-height: 100vh;
   padding: 24px 16px 48px;
   display: flex;

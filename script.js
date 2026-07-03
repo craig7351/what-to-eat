@@ -4,43 +4,43 @@
 
 const meals = {
   breakfast: [
-    { name: "三明治",   icon: "assets/早餐/三明治.png" },
-    { name: "土司夾蛋", icon: "assets/早餐/土司夾蛋.png" },
-    { name: "水煎包",   icon: "assets/早餐/水煎包.png" },
-    { name: "御飯糰",   icon: "assets/早餐/御飯糰.png" },
-    { name: "蛋餅",     icon: "assets/早餐/蛋餅.png" },
-    { name: "漢堡",     icon: "assets/早餐/漢堡.png" },
-    { name: "瘦肉粥",   icon: "assets/早餐/瘦肉粥.png" },
-    { name: "蔥抓餅",   icon: "assets/早餐/蔥抓餅.png" },
-    { name: "燒餅油條", icon: "assets/早餐/燒餅油條.png" },
-    { name: "蘿蔔糕",   icon: "assets/早餐/蘿蔔糕.png" }
+    { name: "三明治",   icon: "assets/早餐/三明治.webp" },
+    { name: "土司夾蛋", icon: "assets/早餐/土司夾蛋.webp" },
+    { name: "水煎包",   icon: "assets/早餐/水煎包.webp" },
+    { name: "御飯糰",   icon: "assets/早餐/御飯糰.webp" },
+    { name: "蛋餅",     icon: "assets/早餐/蛋餅.webp" },
+    { name: "漢堡",     icon: "assets/早餐/漢堡.webp" },
+    { name: "瘦肉粥",   icon: "assets/早餐/瘦肉粥.webp" },
+    { name: "蔥抓餅",   icon: "assets/早餐/蔥抓餅.webp" },
+    { name: "燒餅油條", icon: "assets/早餐/燒餅油條.webp" },
+    { name: "蘿蔔糕",   icon: "assets/早餐/蘿蔔糕.webp" }
   ],
   lunchDinner: [
-    { name: "水餃",     icon: "assets/午晚餐/水餃.png" },
-    { name: "牛肉麵",   icon: "assets/午晚餐/牛肉麵.png" },
-    { name: "石鍋拌飯", icon: "assets/午晚餐/石鍋拌飯.png" },
-    { name: "咖哩飯",   icon: "assets/午晚餐/咖哩飯.png" },
-    { name: "拉麵",     icon: "assets/午晚餐/拉麵.png" },
-    { name: "炒飯",     icon: "assets/午晚餐/炒飯.png" },
-    { name: "焗烤",     icon: "assets/午晚餐/焗烤.png" },
-    { name: "義大利麵", icon: "assets/午晚餐/義大利麵.png" },
-    { name: "壽司",     icon: "assets/午晚餐/壽司.png" },
-    { name: "滷肉飯",   icon: "assets/午晚餐/滷肉飯.png" },
-    { name: "豬排飯",   icon: "assets/午晚餐/豬排飯.png" },
-    { name: "燒臘飯",   icon: "assets/午晚餐/燒臘飯.png" },
-    { name: "親子丼",   icon: "assets/午晚餐/親子丼.png" },
-    { name: "雞腿飯",   icon: "assets/午晚餐/雞腿飯.png" }
+    { name: "水餃",     icon: "assets/午晚餐/水餃.webp" },
+    { name: "牛肉麵",   icon: "assets/午晚餐/牛肉麵.webp" },
+    { name: "石鍋拌飯", icon: "assets/午晚餐/石鍋拌飯.webp" },
+    { name: "咖哩飯",   icon: "assets/午晚餐/咖哩飯.webp" },
+    { name: "拉麵",     icon: "assets/午晚餐/拉麵.webp" },
+    { name: "炒飯",     icon: "assets/午晚餐/炒飯.webp" },
+    { name: "焗烤",     icon: "assets/午晚餐/焗烤.webp" },
+    { name: "義大利麵", icon: "assets/午晚餐/義大利麵.webp" },
+    { name: "壽司",     icon: "assets/午晚餐/壽司.webp" },
+    { name: "滷肉飯",   icon: "assets/午晚餐/滷肉飯.webp" },
+    { name: "豬排飯",   icon: "assets/午晚餐/豬排飯.webp" },
+    { name: "燒臘飯",   icon: "assets/午晚餐/燒臘飯.webp" },
+    { name: "親子丼",   icon: "assets/午晚餐/親子丼.webp" },
+    { name: "雞腿飯",   icon: "assets/午晚餐/雞腿飯.webp" }
   ],
   drinks: [
-    { name: "珍珠奶茶", icon: "assets/飲料/珍珠奶茶.png" },
-    { name: "紅茶",     icon: "assets/飲料/紅茶.png" },
-    { name: "綠茶",     icon: "assets/飲料/綠茶.png" },
-    { name: "美式",     icon: "assets/飲料/美式.png" },
-    { name: "拿鐵",     icon: "assets/飲料/拿鐵.png" },
-    { name: "豆漿",     icon: "assets/飲料/豆漿.png" },
-    { name: "翡翠檸檬", icon: "assets/飲料/翡翠檸檬.png" },
-    { name: "檸檬紅",   icon: "assets/飲料/檸檬紅.png" },
-    { name: "水果茶",   icon: "assets/飲料/水果茶.png" }
+    { name: "珍珠奶茶", icon: "assets/飲料/珍珠奶茶.webp" },
+    { name: "紅茶",     icon: "assets/飲料/紅茶.webp" },
+    { name: "綠茶",     icon: "assets/飲料/綠茶.webp" },
+    { name: "美式",     icon: "assets/飲料/美式.webp" },
+    { name: "拿鐵",     icon: "assets/飲料/拿鐵.webp" },
+    { name: "豆漿",     icon: "assets/飲料/豆漿.webp" },
+    { name: "翡翠檸檬", icon: "assets/飲料/翡翠檸檬.webp" },
+    { name: "檸檬紅",   icon: "assets/飲料/檸檬紅.webp" },
+    { name: "水果茶",   icon: "assets/飲料/水果茶.webp" }
   ]
 };
 
