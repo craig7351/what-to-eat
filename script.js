@@ -67,6 +67,7 @@ const resultDivider = document.getElementById("resultDivider");
 const hub          = document.getElementById("hub");
 const hubFx        = document.getElementById("hubFx");
 const confettiLayer = document.getElementById("confettiLayer");
+const soundToggle  = document.getElementById("soundToggle");
 
 // ===== 幾何工具 =====
 // 角度以「12 點鐘方向為 0、順時針增加」計算
@@ -100,7 +101,7 @@ function buildWheel(category) {
   const sliceAngle = 360 / n;
 
   // 格數越少，icon 與字級越大
-  const iconSize = n <= 10 ? 58 : 48;
+  const iconSize = n <= 10 ? 100 : 80;
   const baseFont = n <= 10 ? 20 : 17;
 
   // 清空
@@ -134,8 +135,8 @@ function buildWheel(category) {
     wheelEl.appendChild(path);
 
     // icon 與名稱依扇形中心以極座標定位；各自包一層 g，之後反向旋轉維持「永遠正立」
-    const iconR = RADIUS - 54;   // icon 靠外圈
-    const textR = RADIUS - 116;  // 名稱靠內圈
+    const iconR = RADIUS - 66;   // icon 靠外圈
+    const textR = RADIUS - 132;  // 名稱靠內圈
     const ip = polar(mid, iconR);
     const tp = polar(mid, textR);
 
@@ -295,6 +296,9 @@ function spin() {
   // 螢幕上的傾角 = 轉盤角度 − finalRotation，隨轉盤轉到 finalRotation 時歸零 → 正立
   applyUpright(finalRotation);
 
+  // 轉動音效：用實際旋轉量與格數推算 tick，與轉盤減速完全同步
+  Sound.spinTicks(4200, finalRotation - currentRotation, n);
+
   const anim = wheelEl.animate(
     [
       { transform: `rotate(${currentRotation}deg)` },
@@ -320,6 +324,7 @@ function spin() {
     void hubFx.offsetWidth;
     hubFx.classList.add("burst");
     launchConfetti();                // 全螢幕彩帶灑落
+    Sound.win();                     // 中獎音效
     showResult(list[index]);
   };
 }
@@ -352,10 +357,162 @@ function switchCategory(category) {
   resetResult();
 }
 
+// ============================================================
+//  音樂 & 音效（Web Audio API 即時合成，無需音檔）
+// ============================================================
+const Sound = (() => {
+  let ctx, master, bgmGain, sfxGain;
+  let muted = false;
+  let bgmTimer = null;
+  let bgmStarted = false;
+
+  // 可愛循環旋律（C 大調），[頻率, 拍數]，beat = 0.26s
+  const BEAT = 0.26;
+  const MELODY = [
+    [659, 1], [784, 1], [880, 1], [784, 1],
+    [659, 1], [587, 1], [523, 2],
+    [587, 1], [659, 1], [784, 1], [659, 1],
+    [587, 1], [523, 2]
+  ];
+  const BASS = [131, 0, 165, 0, 196, 0, 175, 0]; // 每兩拍一個低音
+
+  function ensure() {
+    if (!ctx) {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      ctx = new AC();
+      master = ctx.createGain(); master.gain.value = muted ? 0 : 1; master.connect(ctx.destination);
+      bgmGain = ctx.createGain(); bgmGain.gain.value = 0.10; bgmGain.connect(master);
+      sfxGain = ctx.createGain(); sfxGain.gain.value = 0.5;  sfxGain.connect(master);
+    }
+    if (ctx.state === "suspended") ctx.resume();
+  }
+
+  function tone(freq, start, dur, { type = "triangle", gain = 0.5, dest = null } = {}) {
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = type;
+    o.frequency.value = freq;
+    o.connect(g); g.connect(dest || sfxGain);
+    g.gain.setValueAtTime(0.0001, start);
+    g.gain.linearRampToValueAtTime(gain, start + 0.015);
+    g.gain.exponentialRampToValueAtTime(0.0001, start + dur);
+    o.start(start);
+    o.stop(start + dur + 0.05);
+  }
+
+  // 排一輪旋律，回傳總長度（秒）
+  function scheduleBar(t0) {
+    let t = t0;
+    for (const [f, beats] of MELODY) {
+      tone(f, t, beats * BEAT * 0.9, { type: "triangle", gain: 0.5, dest: bgmGain });
+      t += beats * BEAT;
+    }
+    const barLen = t - t0;
+    // 低音鋪底
+    let bt = t0;
+    for (const bf of BASS) {
+      if (bf) tone(bf, bt, BEAT * 1.6, { type: "sine", gain: 0.6, dest: bgmGain });
+      bt += BEAT * 2;
+    }
+    return barLen;
+  }
+
+  function startBGM() {
+    ensure();
+    if (bgmStarted) return;
+    bgmStarted = true;
+    const loop = () => {
+      if (!bgmStarted) return;
+      const len = scheduleBar(ctx.currentTime + 0.05);
+      bgmTimer = setTimeout(loop, len * 1000);
+    };
+    loop();
+  }
+
+  function stopBGM() {
+    bgmStarted = false;
+    if (bgmTimer) { clearTimeout(bgmTimer); bgmTimer = null; }
+  }
+
+  // 貝茲曲線單軸取值（P0=0, P3=1，兩個控制點 a1、a2）
+  function bez(a1, a2, u) {
+    const v = 1 - u;
+    return 3 * v * v * u * a1 + 3 * v * u * u * a2 + u * u * u;
+  }
+  // 已知進度 y，反解出對應的參數 u（Y 單調遞增，用二分法）
+  function solveU(yTarget, y1, y2) {
+    let lo = 0, hi = 1;
+    for (let k = 0; k < 24; k++) {
+      const mid = (lo + hi) / 2;
+      if (bez(y1, y2, mid) < yTarget) lo = mid; else hi = mid;
+    }
+    return (lo + hi) / 2;
+  }
+
+  // 轉動音效：每轉過「一格」響一聲，時間點直接由轉盤的 ease 曲線推算 → 完全對齊
+  // easing = cubic-bezier(0.16, 1, 0.3, 1)：X 控制點 (0.16, 0.3)，Y 控制點 (1, 1)
+  function spinTicks(durationMs, deltaAngle, sliceCount) {
+    ensure();
+    const dur = durationMs / 1000;
+    const sliceAngle = 360 / sliceCount;
+    const total = Math.min(Math.round(deltaAngle / sliceAngle), 140); // 經過的格數
+    const t0 = ctx.currentTime;
+    for (let m = 1; m <= total; m++) {
+      const yTarget = m / total;              // 角度進度（0~1）
+      const u = solveU(yTarget, 1, 1);        // 反解貝茲參數
+      const x = bez(0.16, 0.3, u);            // 對應的時間進度（0~1）
+      const t = t0 + x * dur;
+      tone(1150 - yTarget * 480, t, 0.045, { type: "square", gain: 0.08 });
+    }
+  }
+
+  // 中獎：上行琶音 + 亮片
+  function win() {
+    ensure();
+    const t0 = ctx.currentTime + 0.02;
+    [523, 659, 784, 1046].forEach((f, i) => {
+      tone(f, t0 + i * 0.11, 0.5, { type: "triangle", gain: 0.55 });
+    });
+    tone(1568, t0 + 0.44, 0.6, { type: "sine", gain: 0.35 });
+    tone(2093, t0 + 0.5, 0.5, { type: "sine", gain: 0.25 });
+  }
+
+  // 按鈕／點擊
+  function click() {
+    ensure();
+    tone(880, ctx.currentTime, 0.08, { type: "square", gain: 0.25 });
+  }
+
+  function toggleMute() {
+    muted = !muted;
+    if (ctx) master.gain.setTargetAtTime(muted ? 0 : 1, ctx.currentTime, 0.02);
+    return muted;
+  }
+
+  return { startBGM, stopBGM, spinTicks, win, click, toggleMute };
+})();
+
 // ===== 事件 =====
-spinBtn.addEventListener("click", spin);
+spinBtn.addEventListener("click", () => {
+  if (isSpinning) return;
+  Sound.startBGM();      // 首次點擊啟動背景音樂（符合瀏覽器自動播放規範）
+  Sound.click();
+  spin();                // 轉動音效在 spin() 內依實際旋轉量觸發
+});
+
 tabs.forEach((t) => {
-  t.addEventListener("click", () => switchCategory(t.dataset.category));
+  t.addEventListener("click", () => {
+    if (isSpinning) return;
+    Sound.click();
+    switchCategory(t.dataset.category);
+  });
+});
+
+soundToggle.addEventListener("click", () => {
+  const muted = Sound.toggleMute();
+  soundToggle.classList.toggle("is-muted", muted);
+  soundToggle.querySelector(".sound-ico").textContent = muted ? "🔇" : "🔊";
+  if (!muted) Sound.startBGM();
 });
 
 // ===== 初始化 =====

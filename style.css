@@ -442,6 +442,26 @@ body {
   100% { transform: scale(1); }
 }
 
+/* ===== 音效開關 ===== */
+.sound-toggle {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  z-index: 60;
+  width: 52px;
+  height: 52px;
+  border: none;
+  cursor: pointer;
+  border-radius: 50%;
+  font-size: 22px;
+  background: rgba(255,248,236,.9);
+  box-shadow: 0 5px 14px rgba(224,154,31,.3), inset 0 0 0 2px #fff;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.sound-toggle:hover { transform: translateY(-2px) scale(1.05); }
+.sound-toggle:active { transform: scale(.95); }
+.sound-toggle.is-muted { filter: grayscale(.6); opacity: .8; }
+
 /* ===== 全螢幕彩帶紙屑 ===== */
 .confetti-layer {
   position: fixed;
