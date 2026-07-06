@@ -20,7 +20,7 @@
 - **隨機抽選**：至少轉 5 圈、ease-out 減速，指針精準對齊中選格。
 - **中獎連鎖動畫**：中央笑臉大笑 → 噴出愛心／閃光 → 全螢幕彩帶灑落 → 結果卡彈出。
 - **即時合成音效**：背景音樂、轉動「答答答」聲（與減速完全同步）、中獎琶音、點擊音，全部用 Web Audio API 合成，**不需要任何音檔**。
-- **輕量素材**：42 張圖以 WebP（保留透明）交付，總大小僅 ~3.7MB。
+- **輕量素材**：52 張圖以 WebP（保留透明）交付，總大小僅 ~4.9MB。
 - **RWD**：桌機雙欄（轉盤＋結果卡）、手機單欄。
 - **FB 粉絲團按鈕**：右上角導流。
 
@@ -52,7 +52,9 @@ what-to-eat/
 │  ├─ 主頁/            # 背景、指針、裝飾 icon
 │  ├─ 早餐/  午晚餐/  飲料/   # 各分類食物圖
 │  └─ 自訂/            # 編輯菜單新增餐點時可挑選的內建圖示
-├─ docs/preview.webp   # README 預覽圖
+├─ docs/
+│  ├─ preview.webp     # README 預覽圖
+│  └─ og-image.jpg     # 分享連結預覽圖（Open Graph / Twitter Card）
 └─ .claude/skills/
    └─ remove-bg/       # 去背 skill（見下）
 ```
@@ -95,8 +97,9 @@ python .claude/skills/remove-bg/remove_bg.py "assets/飲料" --backup --check ch
 8. **音樂與音效**：Web Audio 合成 BGM／轉動／中獎／點擊音，並讓 tick 與減速精準對齊。
 9. **飲料分頁**：新增第三個轉盤，飲料圖以自製去背流程處理，並將方法沉澱成 skill。
 10. **宣傳**：右上角 FB 粉絲團按鈕。
-11. **素材瘦身**：42 張圖全轉 WebP（保留透明），58MB → 3.7MB。
-12. **編輯菜單**：三分類可增刪改換圖，localStorage 保存、可還原預設，新增餐點從內建圖示挑選。
+11. **素材瘦身**：全部圖片轉 WebP（保留透明），58MB → 3.7MB。
+12. **編輯菜單**：三分類可增刪改換圖，localStorage 保存、可還原預設，新增餐點從內建圖示挑選（新增 10 張「自訂」分類圖示，素材增至 52 張、~4.9MB）。
+13. **SEO / Open Graph**：補 `description`、`canonical`、`og:*`、`twitter:card` meta 標籤，並新增專為分享卡片重排的 `docs/og-image.jpg`（1200×630），讓連結分享到 FB / LINE / Discord 等平台時有預覽圖與說明。
 
 > 完整迭代可見 Git commit 歷史。
 
